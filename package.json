@@ -1,0 +1,9 @@
+{
+  "name": "vizgooglefit",
+  "version": "1.0.0",
+  "description": "Visualize your Google Fit Data",
+  "dependencies": {
+    "d3": "^5",
+    "d3-array": "^2"
+  }
+}
