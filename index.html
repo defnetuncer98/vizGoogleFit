@@ -13,24 +13,29 @@
         <script src="node_modules/d3/dist/d3.min.js"></script>
         <script src="node_modules/d3-array/dist/d3-array.min.js"></script>
     </head>
-    <body style="background-color:#1f1f1f">
-            <div class="row">
-                <div class="col s12 m5 l4">
-                    <img class="responsive-img" src="logo.png"/>
-                    <a id="authorize-button" class="col s2" style="display: none;">
-                            <img class="responsive-img" src="signin.png"/>
-                    </a>
-    
-                    <a id="signout-button" class="col s2" style="display: none;">
-                            <img class="responsive-img" src="signout.png"/>
-                    </a>
-                </div>
-                <div class="col s12 m7 l8">
-                </div>
+    <body style="background-color:#080808;">
+        <div class="row">
+            <div class="col s12" style="background-color:#1f1f1f">
+                <img class="responsive-img col s3" src="logo.png"/>
+                <h4 class="auth-info col s6" style="font-weight:200;"></h4>
+                <a id="authorize-button" class="col s1 right-align" style="display: none;padding:30px;">
+                        <img class="responsive-img" src="signin.png"/>
+                </a>
+                <a id="signout-button" class="col s1 right-align" style="display: none;padding:30px;">
+                        <img class="responsive-img" src="signout.png"/>
+                </a>
             </div>
-        <!--JavaScript at end of body for optimized loading-->
-        <script type="text/javascript" src="js/materialize.min.js"></script>            
-        <script src="app.js"></script>
+            <div class="col s12 m5 l4">
+            </div>
+            <div>
+                <img class="responsive-img" src="runner.gif">
+                <h4 class="daily-step col s6">
+                </h4>
+            </div>
+        </div>
+
+        <script src="js/materialize.min.js"></script>            
+        <script src="js/app.js"></script>
         <script src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
 <!--
         <div class="logo" style="height:0px;width:0px;transform:scale(0.3);">
