@@ -12,25 +12,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <script src="node_modules/d3/dist/d3.min.js"></script>
         <script src="node_modules/d3-array/dist/d3-array.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
     </head>
-    <body style="background-color:#080808;">
+    <body style="background-color:#080808;font-family:Poppins;">
         <div class="row">
-            <div class="col s12" style="background-color:#1f1f1f">
-                <img class="responsive-img col s3" src="logo.png"/>
-                <h4 class="auth-info col s6" style="font-weight:200;"></h4>
-                <a id="authorize-button" class="col s1 right-align" style="display: none;padding:30px;">
-                        <img class="responsive-img" src="signin.png"/>
-                </a>
-                <a id="signout-button" class="col s1 right-align" style="display: none;padding:30px;">
-                        <img class="responsive-img" src="signout.png"/>
-                </a>
+            <nav style="background-color:#1f1f1f" role="navigation">
+                <ul style="display: flex;">
+                    <li><img class="auth-image circle responsive-img col s6"/></li>
+                    <li><h6 class="auth-info col s7" style="color:white;font-weight:600;"></h6></li>
+                    <li><a id="authorize-button" class="col s3" style="display:none;padding:12px;">
+                            <img class="responsive-img" src="signin.png"/>
+                    </a></li>
+                    <li><a id="signout-button" class="col s3" style="display:none;padding:12px;">
+                            <img class="responsive-img" src="signout.png"/>
+                    </a></li>
+                    <li><img class="responsive-img col s3 right" src="logo.png"/></li>
+                </ul>
+            </nav>
+            <div class="col s1 card center-align pulse" style="background-color:#1f1f1f;margin:30px;">
+                <img class="responsive-img col s12" src="runner.gif" style="padding:0px;">
+                <h4 class="daily-step col s12" style="font-weight:600;padding:0px;"></h4>
+                <h6 class="daily-step col s12" style="color:white;font-weight:100;padding:0px;">STEPS</h6>
             </div>
-            <div class="col s12 m5 l4">
+            <div class="col s8 card center-align" style="background-color:#1f1f1f;margin:30px;">
+                <div id="vizGoogleFit" class="vizGoogleFit"></div>
             </div>
-            <div>
-                <img class="responsive-img" src="runner.gif">
-                <h4 class="daily-step col s6">
-                </h4>
+            <div class="col s1 card center-align" style="background-color:#1f1f1f;margin:30px;">
+                <a id="steps-button" class="steps-button chip left" style="display:none;">STEPS</a>
             </div>
         </div>
 
