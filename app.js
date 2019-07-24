@@ -1,6 +1,6 @@
 var days = [];
-var apiKey = 'AIzaSyAFE7Ispkhhy9ZR68mzTL6TWFMrJufkWfU';
-var clientId = '283704614465-a6octk36hj6inh564f23d2t10mt0u9fr.apps.googleusercontent.com';
+var apiKey = '';
+var clientId = '';
 var scopes = 'https://www.googleapis.com/auth/fitness.activity.read';
 var auth2;
 var authorizeButton = document.getElementById('authorize-button');
@@ -134,6 +134,7 @@ function updateSigninStatus(isSignedIn) {
         d3.select('.daily-step').attr('style','display:none;');
         d3.select('.auth-info').text('Get Started by Connecting your Google Account!');
         d3.select('.steps-button').attr('style','display:none;');
+        d3.select('.calories-button').attr('style','display:none;');
         d3.select('.svg').remove();
         d3.select('.slider').attr('style','display:none;');
         d3.select('.header').text('');
