@@ -30,42 +30,54 @@ function prepareData(data){
 function viz(max){
     if(max>days.length) {
         data = days;
-        d3.select(".header").text("Daily Steps | Last " + days.length + " Days");
+        max = days.length;
     }
     else{
         data = days.slice(days.length-max, days.length);
-        d3.select(".header").text("Daily Steps | Last " + max + " Days");
     }
-    offsetwidth = document.getElementById("vizGoogleFit").offsetWidth;
+    d3.select(".header").text("Daily Steps | Last " + max + " Days");
+    width = document.getElementById("vizGoogleFit").offsetWidth;
+    height_margin = window.innerHeight/2 + 80;
+    height = window.innerHeight/2;
 
-    var xScale = d3.scaleLinear()
-        .domain([0, data.length]) // input
-        .range([0, offsetwidth]); // output
+    var maxDate = new Date();
+    var minDate = new Date();
+    minDate.setDate(maxDate.getDate()-max);
+    
+    var xScale =  d3.scaleTime()
+        .domain([minDate, maxDate])
+        .range([0, width]);
 
     var yScale = d3.scaleLinear()
-        .domain([0, Math.max(...data)]) // input 
-        .range([window.innerHeight/2, 0]); // output 
+        .domain([0, Math.max(...data)]) 
+        .range([height, 0]); 
 
     console.log(data);
     
+    // remove the previous plot
     d3.select('.svg').remove();
+    
+    // display the slider
     d3.select('.slider').attr('style','display:block;');
-    var svg = d3.select(".vizGoogleFit").append("svg")
+
+    // new plot 
+    var svg = d3.select(".vizGoogleFit")
+    .append("svg")
     .attr("class","svg")
-    .attr("width", offsetwidth)
-    .attr("height", window.innerHeight/2)
+    .attr("width", width)
+    .attr("height", height_margin)
     .append("g");
 
+    // draw path
     svg.append("path")
     .datum(data)
-    .attr("class", "line") // Assign a class for styling 
     .style('fill', 'none')
     .attr("stroke", "purple")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
-    .x(function(d, i) { return xScale(i); })
-    .y(function(d) {return yScale(d); })
-    .curve(d3.curveMonotoneX));
+        .x(function(d, i) { return xScale(new Date().setDate(new Date().getDate()-(max-i))); })
+        .y(function(d) {return yScale(d); })
+        .curve(d3.curveMonotoneX));
 
     var tooltip = d3.select("body")
     .append("div")
@@ -78,8 +90,8 @@ function viz(max){
     .data(data)
     .enter()    
     .append("svg:circle")
-    .attr("cx", function(d, i) { return xScale(i) })
-    .attr("cy", function(d) { return yScale(d) })
+    .attr("cx", function(d, i) { return xScale(new Date().setDate(new Date().getDate()-(max-i))); })
+    .attr("cy", function(d) { return yScale(d); })
     .attr("r", 3)
     .attr("style","fill:indigo;stroke:indigo")
     .on("mouseover", function(a, b, c) {
@@ -94,6 +106,21 @@ function viz(max){
         d3.select(this).attr("r", "3")
         return tooltip.style("visibility", "hidden");
     });
+
+    var formatTime = d3.timeFormat("%b %d");
+    
+    svg.selectAll("text")
+        .data(data)
+        .enter()
+        .append("svg:text")
+        .text(function(d,i) { return formatTime(new Date().setDate(new Date().getDate()-(max-i-1)))})
+        .attr('transform', (d,i)=>{
+            return 'translate( '+ xScale(new Date().setDate(new Date().getDate()-(max-i))) + ' , '+ height +'),'+ 'rotate(-90)';})
+        .attr("fill", "gray")
+        .attr('x', 0)
+        .attr('y', 0)
+        .style("text-anchor", "end")
+        .attr("dy", "0.4em");
 
 }
 
