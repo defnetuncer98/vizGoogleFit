@@ -7,8 +7,19 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap" rel="stylesheet">
     </head>
-    <body style="background-color:#080808;font-family:Poppins;">
+    <style>
+        .pm{
+            font-family: 'Permanent Marker'
+        }
+        .body{
+            font-family: 'Poppins';
+            background-color: #080808
+        }
+    </style>
+    <body class="body">
+    <main>
         <div class="row">
             <nav style="background-color:#1f1f1f" role="navigation">
                 <ul style="display: flex;">
@@ -20,30 +31,54 @@
                     <li><a id="signout-button" class="col s3" style="display:none;padding:12px;">
                             <img class="responsive-img" src="signout.png"/>
                     </a></li>
+                    <li><a id="dark-theme" class="col s1 left" style="display:none;padding:12px;">
+                            <i class="medium material-icons">brightness_3</i>
+                    </a></li>
+                    <li><a id="light-theme" class="col s1 left" style="padding:12px;">
+                            <i class="medium material-icons">wb_sunny</i>
+                    </a></li>
                     <li><img class="responsive-img col s3 right" src="logo.png"/></li>
                 </ul>
             </nav>
             <div class="col s1 card center-align" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
-                <img class="responsive-img col s12" src="runner.gif" style="padding:0px;">
-                <h4 class="daily-step col s12" style="font-weight:600;padding:0px;"></h4>
-                <h6 class="daily-step col s12" style="color:white;font-weight:100;padding:0px;">STEPS</h6>
+                <img class="responsive-img" src="runner.gif" style="padding:0px;">
+                <h3 class="daily-step pm"></h4>
+                <h5 class="daily-step pm" style="color:white;">STEPS</h6>
+                <br>
+                <br>
+
             </div>
-            <div class="col s8 card center-align" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
+            <div class="col s7 card center-align" id="plot-card" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
                 <h6 class="header left" style="color:white;font-weight:600;"></h6>
                 <div id="vizGoogleFit" class="vizGoogleFit"></div>
-                <div class="range-field slider" style="display:none;">
+                <div class="range-field slider" style="height:50px;display:none;">
                     <input type="range" min="0" value="7" max="100" oninput="viz(this.value)" />
                 </div>
             </div>
-            <div class="col s1 card center-align" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
-                <a id="steps-button" class="steps-button chip left" style="display:none;">STEPS</a>
-                <a id="calories-button" class="calories-button chip left" style="display:none;">CALORIES</a>
+            <div class="col s2 card center-align" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
+                <br>
+                <a id="steps-button" class="steps-button chip left hoverable waves-effect" style="display:none;">STEPS</a>
+                <a id="calories-button" class="calories-button chip left hoverable waves-effect" style="display:none;">CALORIES</a>
+                <br><br>
+                <h6 style="color:white">Your data is safe!</h3>
+                <p style="color:gray">All processing and visualization of your data is done offline on your computer and only accessible by you.</h4>
+                <br><br>
+                <a class="github-button" href="https://github.com/defnetuncer98/vizGoogleFit" data-icon="octicon-star" data-size="large" data-show-count="true">Star</a>
+                <a class="github-button" href="https://github.com/defnetuncer98" data-size="large">defnetuncer98</a>
             </div>
         </div>
-        
+        </main>
+        <!-- <footer style="position:fixed;left: 0;bottom: 0;width: 100%; background-color: #1f1f1f;">
+            <div class="footer-copyright">
+            <div class="container">© 2014 Copyright Text
+                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+            </div>
+            </div>
+        </footer> -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>     
         <script src="https://d3js.org/d3.v5.min.js"></script>     
         <script src="app.js"></script>
-        <script src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
+        <script src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>    
     </body>
 </html>

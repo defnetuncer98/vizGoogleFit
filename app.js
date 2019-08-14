@@ -5,8 +5,11 @@ var scopes = 'https://www.googleapis.com/auth/fitness.activity.read';
 var auth2;
 var authorizeButton = document.getElementById('authorize-button');
 var signoutButton = document.getElementById('signout-button');
+var darkTheme = document.getElementById('dark-theme');
+var lightTheme = document.getElementById('light-theme');
 var stepsButton = document.getElementById('steps-button');
 var caloriesButton = document.getElementById('calories-button');
+var plotCard = document.getElementById('plot-card');
 var midnight = new Date().setHours(0,0,0,0);
 var dailystep;
 
@@ -58,7 +61,7 @@ function viz(max){
     d3.select('.svg').remove();
     
     // display the slider
-    d3.select('.slider').attr('style','display:block;');
+    d3.select('.slider').attr('style','display:block;height:50px;');
 
     // new plot 
     var svg = d3.select(".vizGoogleFit")
@@ -72,6 +75,7 @@ function viz(max){
     svg.append("path")
     .datum(data)
     .style('fill', 'none')
+    .attr("class", "line-plot")
     .attr("stroke", "purple")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
@@ -115,7 +119,7 @@ function viz(max){
         .append("svg:text")
         .text(function(d,i) { return formatTime(new Date().setDate(new Date().getDate()-(max-i-1)))})
         .attr('transform', (d,i)=>{
-            return 'translate( '+ xScale(new Date().setDate(new Date().getDate()-(max-i))) + ' , '+ height +'),'+ 'rotate(-90)';})
+            return 'translate( '+ xScale(new Date().setDate(new Date().getDate()-(max-i))) + ' , '+ (height+10) +'),'+ 'rotate(-90)';})
         .attr("fill", "gray")
         .attr('x', 0)
         .attr('y', 0)
@@ -141,6 +145,8 @@ function initAuth() {
         signoutButton.onclick = handleSignoutClick;
         stepsButton.onclick = handleStepsClick;
         caloriesButton.onclick = handleCaloriesClick;
+        darkTheme.onclick = handleDarkThemeClick;
+        lightTheme.onclick = handleLightThemeClick;
       });
 }
 
@@ -152,39 +158,65 @@ function updateSigninStatus(isSignedIn) {
         var auth = auth2.currentUser.get().getBasicProfile();
         d3.select('.auth-image').attr('style','display:block;padding:12px;').attr('src',auth.getImageUrl());
         d3.select('.auth-info').text(auth.getGivenName() + ' ' + auth.getFamilyName());
-        d3.select('.steps-button').attr('style','display:block;');
-        d3.select('.calories-button').attr('style','display:block;');
+        stepsButton.style.display = 'block';
+        caloriesButton.style.display = 'block';
+        handleStepsClick();
     } else {
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';
         d3.select('.auth-image').attr('style','display:none;');
         d3.select('.daily-step').attr('style','display:none;');
         d3.select('.auth-info').text('Get Started by Connecting your Google Account!');
-        d3.select('.steps-button').attr('style','display:none;');
-        d3.select('.calories-button').attr('style','display:none;');
+        stepsButton.style.display = 'none';
+        caloriesButton.style.display = 'none';
         d3.select('.svg').remove();
-        d3.select('.slider').attr('style','display:none;');
+        d3.select('.slider').attr('style','display:none;height:50px;');
         d3.select('.header').text('');
     }
 }
 
-function handleAuthClick(event) {
+function handleAuthClick() {
     auth2.signIn();
 }
 
-function handleSignoutClick(event) {
+function handleSignoutClick() {
     auth2.signOut();
 }
 
-function handleStepsClick(event) {
+function handleStepsClick() {
     d3.select('.calories-button').attr('style','background-color:#e4e4e4;color:black;');
     d3.select('.steps-button').attr('style','background-color:purple;color:white;');
     makeApiCallSteps();
 }
 
-function handleCaloriesClick(event) {
+function handleCaloriesClick() {
     d3.select('.calories-button').attr('style','background-color:indigo;color:white;');
     d3.select('.steps-button').attr('style','background-color:#e4e4e4;color:black;');
+}
+
+function handleDarkThemeClick(){
+    d3.select('.body').attr('style', 'background-color:#080808;')
+    lightTheme.style.display = 'block';
+    darkTheme.style.display = 'none';
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+function handleLightThemeClick(){
+    var rndm = getRandomColor();
+//    if(rndm>'#0000ff') plotCard.style.backgroundColor = '#1f1f1f';
+//    else plotCard.style.backgroundColor = '#lightGray';
+    document.body.style.backgroundColor = rndm;
+    d3.select('.line-plot').attr("stroke", rndm);
+    lightTheme.style.display = 'none';
+    darkTheme.style.display = 'block';
 }
 
 function makeApiCallSteps() {
