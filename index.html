@@ -7,12 +7,8 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap" rel="stylesheet">
     </head>
     <style>
-        .pm{
-            font-family: 'Permanent Marker'
-        }
         .body{
             font-family: 'Poppins';
             background-color: #080808
@@ -31,10 +27,10 @@
                     <li><a id="signout-button" class="col s3" style="display:none;padding:12px;">
                             <img class="responsive-img" src="signout.png"/>
                     </a></li>
-                    <li><a id="dark-theme" class="col s1 left" style="display:none;padding:12px;">
+                    <li><a id="dark-theme" class="col s1 right" style="display:none;padding:12px;">
                             <i class="medium material-icons">brightness_3</i>
                     </a></li>
-                    <li><a id="light-theme" class="col s1 left" style="padding:12px;">
+                    <li><a id="light-theme" class="col s1 right" style="padding:12px;">
                             <i class="medium material-icons">wb_sunny</i>
                     </a></li>
                     <li><img class="responsive-img col s3 right" src="logo.png"/></li>
@@ -42,12 +38,14 @@
             </nav>
             <div class="col s1 card center-align" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
                 <img class="responsive-img" src="runner.gif" style="padding:0px;">
-                <h3 class="daily-step pm"></h4>
-                <h5 class="daily-step pm" style="color:white;">STEPS</h6>
+                <h3 class="daily-step"></h4>
+                <h6 style="color:white">STEPS</h3>
                 <br>
                 <br>
-
-            </div>
+                <p style="color:gray">Average daily steps</p>
+                <h6 style="color:white" class="avg"></h3>
+                <p style="color:gray;" class="totaldata"></p>
+                </div>
             <div class="col s7 card center-align" id="plot-card" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
                 <h6 class="header left" style="color:white;font-weight:600;"></h6>
                 <div id="vizGoogleFit" class="vizGoogleFit"></div>

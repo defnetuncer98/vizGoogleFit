@@ -16,19 +16,22 @@ var dailystep;
 function prepareData(data){
     var sum = 0;
     var dayends = 0;
+    data.reverse();
+    days.push(dailystep);
     data.forEach(function(element) {
         if(!sum){
-            dayends = parseInt(element.startTimeNanos)+86400000000000;
+            dayends = parseInt(element.startTimeNanos)-86400000000000;
         }
-        sum+=element.value[0].intVal;      
-        if(parseInt(element.endTimeNanos)>dayends){
+        if(parseInt(element.endTimeNanos)<dayends){
             days.push(sum);
             sum=0;
+            dayends = parseInt(element.startTimeNanos)-86400000000000;
         }
+        sum+=element.value[0].intVal;            
     });
     days.push(sum);
-    days.push(dailystep);
 }
+
 
 function viz(max){
     if(max>days.length) {
@@ -36,8 +39,12 @@ function viz(max){
         max = days.length;
     }
     else{
-        data = days.slice(days.length-max, days.length);
+        data = days.slice(0, max);
     }
+    data.reverse();
+    var avg = data.reduce((a,b) => a + b, 0)/max;
+    d3.select(".avg").text(parseInt(avg));
+    d3.select(".totaldata").text("for the last "+max+" days");
     d3.select(".header").text("Daily Steps | Last " + max + " Days");
     width = document.getElementById("vizGoogleFit").offsetWidth;
     height_margin = window.innerHeight/2 + 80;
@@ -94,6 +101,7 @@ function viz(max){
     .data(data)
     .enter()    
     .append("svg:circle")
+    .attr("class","hoverable")
     .attr("cx", function(d, i) { return xScale(new Date().setDate(new Date().getDate()-(max-i))); })
     .attr("cy", function(d) { return yScale(d); })
     .attr("r", 3)
@@ -125,6 +133,14 @@ function viz(max){
         .attr('y', 0)
         .style("text-anchor", "end")
         .attr("dy", "0.4em");
+
+    yAxis = d3.axisLeft().scale(yScale).ticks(3);
+    
+    svg.append("g")
+        .attr("style", "color:gray;font-size:12px;")
+        .attr("transform", "translate("+(width+6)+",0)")
+        .call(yAxis);
+
 
 }
 
@@ -224,7 +240,7 @@ function makeApiCallSteps() {
         var request = gapi.client.fitness.users.dataSources.datasets.get({
             userId: 'me',
             dataSourceId: 'derived:com.google.step_count.delta:com.google.android.gms:estimated_steps',
-            datasetId: midnight-86400000*100 + '000000-' + midnight + '000000',
+            datasetId: midnight-86400000*100 + '000000-' + midnight + '000000', // last 100 days
         });
         request.execute(function(resp) {
             prepareData(resp.point);
@@ -242,10 +258,7 @@ function makeApiCallDailySteps() {
         });
         request.execute(function(resp) {
             dailystep = d3.sum(resp.point.map(d => d.value[0].intVal));
-            d3
-            .select('.daily-step')
-            .attr('style','display:block;color:white;')
-            .text(dailystep);
+            d3.select('.daily-step').attr('style','display:block;color:white;line-height: 0').text(dailystep);
         });
     });
 }
