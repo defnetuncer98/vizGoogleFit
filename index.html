@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="nouislider.min.css">
         <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
     </head>
     <style>
@@ -42,16 +43,14 @@
                 <h6 style="color:white">STEPS</h3>
                 <br>
                 <br>
-                <p style="color:gray">Average daily steps</p>
+                <p style="color:gray">Average daily steps for selected </p>
+                <p style="color:gray;" class="days"></p>
                 <h6 style="color:white" class="avg"></h3>
-                <p style="color:gray;" class="totaldata"></p>
                 </div>
             <div class="col s7 card center-align" id="plot-card" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
                 <h6 class="header left" style="color:white;font-weight:600;"></h6>
                 <div id="vizGoogleFit" class="vizGoogleFit"></div>
-                <div class="range-field slider" style="height:50px;display:none;">
-                    <input type="range" min="0" value="7" max="100" oninput="viz(this.value)" />
-                </div>
+                <div id="slider" style="height:50px;display:none;"></div>
             </div>
             <div class="col s2 card center-align" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
                 <br>
@@ -75,7 +74,8 @@
         </footer> -->
         <script async defer src="https://buttons.github.io/buttons.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>     
-        <script src="https://d3js.org/d3.v5.min.js"></script>     
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="nouislider.min.js"></script>
         <script src="app.js"></script>
         <script src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>    
     </body>

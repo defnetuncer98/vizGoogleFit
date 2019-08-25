@@ -12,6 +12,7 @@ var caloriesButton = document.getElementById('calories-button');
 var plotCard = document.getElementById('plot-card');
 var midnight = new Date().setHours(0,0,0,0);
 var dailystep;
+var formatTime = d3.timeFormat("%b %d");
 
 function prepareData(data){
     var sum = 0;
@@ -32,28 +33,25 @@ function prepareData(data){
     days.push(sum);
 }
 
-
-function viz(max){
-    if(max>days.length) {
-        data = days;
-        max = days.length;
-    }
-    else{
-        data = days.slice(0, max);
-    }
+function viz(values){
+    values = [days.length-parseInt(values[1]),days.length-parseInt(values[0])]
+    max = values[1]-values[0];
+    data = days.slice(values[0], values[1]);
     data.reverse();
     var avg = data.reduce((a,b) => a + b, 0)/max;
-    d3.select(".avg").text(parseInt(avg));
-    d3.select(".totaldata").text("for the last "+max+" days");
-    d3.select(".header").text("Daily Steps | Last " + max + " Days");
     width = document.getElementById("vizGoogleFit").offsetWidth;
     height_margin = window.innerHeight/2 + 80;
     height = window.innerHeight/2;
 
     var maxDate = new Date();
     var minDate = new Date();
+    maxDate.setDate(maxDate.getDate()-values[0]);
     minDate.setDate(maxDate.getDate()-max);
     
+    d3.select(".days").text(max + " days:");
+    d3.select(".avg").text(parseInt(avg));
+    d3.select(".header").text("Daily Steps | " + formatTime(minDate) + " - " + formatTime(maxDate));
+
     var xScale =  d3.scaleTime()
         .domain([minDate, maxDate])
         .range([0, width]);
@@ -61,14 +59,12 @@ function viz(max){
     var yScale = d3.scaleLinear()
         .domain([0, Math.max(...data)]) 
         .range([height, 0]); 
-
-    console.log(data);
     
     // remove the previous plot
     d3.select('.svg').remove();
     
     // display the slider
-    d3.select('.slider').attr('style','display:block;height:50px;');
+    slider.style='display:block;height:50px;';
 
     // new plot 
     var svg = d3.select(".vizGoogleFit")
@@ -119,7 +115,6 @@ function viz(max){
         return tooltip.style("visibility", "hidden");
     });
 
-    var formatTime = d3.timeFormat("%b %d");
     
     svg.selectAll("text")
         .data(data)
@@ -140,8 +135,6 @@ function viz(max){
         .attr("style", "color:gray;font-size:12px;")
         .attr("transform", "translate("+(width+6)+",0)")
         .call(yAxis);
-
-
 }
 
 function handleClientLoad() {
@@ -186,7 +179,7 @@ function updateSigninStatus(isSignedIn) {
         stepsButton.style.display = 'none';
         caloriesButton.style.display = 'none';
         d3.select('.svg').remove();
-        d3.select('.slider').attr('style','display:none;height:50px;');
+        slider.style = 'display:none;height:50px;';
         d3.select('.header').text('');
     }
 }
@@ -244,7 +237,21 @@ function makeApiCallSteps() {
         });
         request.execute(function(resp) {
             prepareData(resp.point);
-            viz(7);
+            var slider = document.getElementById('slider');
+                noUiSlider.create(slider, {
+                start: [days.length-7,days.length],
+                connect: true,
+                step: 1,
+                orientation: 'horizontal', 
+                behaviour: 'tap-drag', 
+                range: {
+                'min': 0,
+                'max': days.length
+                }
+            });
+            slider.noUiSlider.on('update', function () {
+                viz(slider.noUiSlider.get());
+            });
         });
     });
 }
