@@ -31,23 +31,23 @@ function prepareData(data){
         sum+=element.value[0].intVal;            
     });
     days.push(sum);
+    days.reverse();
 }
 
 function viz(values){
-    values = [days.length-parseInt(values[1]),days.length-parseInt(values[0])]
-    max = values[1]-values[0];
-    data = days.slice(values[0], values[1]);
+    var values = [parseInt(values[0]),parseInt(values[1])]
+    var max = values[1]-values[0];
+    var data = days.slice(values[0], values[1]);
     data.reverse();
     var avg = data.reduce((a,b) => a + b, 0)/max;
     width = document.getElementById("vizGoogleFit").offsetWidth;
     height_margin = window.innerHeight/2 + 80;
     height = window.innerHeight/2;
-
     var maxDate = new Date();
     var minDate = new Date();
-    maxDate.setDate(maxDate.getDate()-values[0]);
-    minDate.setDate(maxDate.getDate()-max);
-    
+    maxDate.setDate(new Date().getDate()-(days.length-values[1]));
+    minDate.setDate((new Date().getDate()-(days.length-values[1])-max+1));
+    debugger;
     d3.select(".days").text(max + " days:");
     d3.select(".avg").text(parseInt(avg));
     d3.select(".header").text("Daily Steps | " + formatTime(minDate) + " - " + formatTime(maxDate));
@@ -64,7 +64,7 @@ function viz(values){
     d3.select('.svg').remove();
     
     // display the slider
-    slider.style='display:block;height:50px;';
+    slider.style='display:block;';
 
     // new plot 
     var svg = d3.select(".vizGoogleFit")
@@ -82,7 +82,11 @@ function viz(values){
     .attr("stroke", "purple")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
-        .x(function(d, i) { return xScale(new Date().setDate(new Date().getDate()-(max-i))); })
+        .x(function(d, i) { 
+            var date = new Date();
+            date.setMonth(maxDate.getMonth());
+            date.setDate(maxDate.getDate()-i);
+            return xScale(date);})
         .y(function(d) {return yScale(d); })
         .curve(d3.curveMonotoneX));
 
@@ -98,7 +102,11 @@ function viz(values){
     .enter()    
     .append("svg:circle")
     .attr("class","hoverable")
-    .attr("cx", function(d, i) { return xScale(new Date().setDate(new Date().getDate()-(max-i))); })
+    .attr("cx", function(d, i) { 
+        var date = new Date();
+        date.setMonth(maxDate.getMonth());
+        date.setDate(maxDate.getDate()-i);
+        return xScale(date);})
     .attr("cy", function(d) { return yScale(d); })
     .attr("r", 3)
     .attr("style","fill:indigo;stroke:indigo")
@@ -120,9 +128,16 @@ function viz(values){
         .data(data)
         .enter()
         .append("svg:text")
-        .text(function(d,i) { return formatTime(new Date().setDate(new Date().getDate()-(max-i-1)))})
+        .text(function(d,i) { 
+            var date = new Date();
+            date.setMonth(maxDate.getMonth());
+            date.setDate(maxDate.getDate()-i);
+            return formatTime(date);})
         .attr('transform', (d,i)=>{
-            return 'translate( '+ xScale(new Date().setDate(new Date().getDate()-(max-i))) + ' , '+ (height+10) +'),'+ 'rotate(-90)';})
+            var date = new Date();
+            date.setMonth(maxDate.getMonth());
+            date.setDate(maxDate.getDate()-i);
+            return 'translate( '+ xScale(date) + ' , '+ (height+10) +'),'+ 'rotate(-90)';})
         .attr("fill", "gray")
         .attr('x', 0)
         .attr('y', 0)
@@ -132,7 +147,7 @@ function viz(values){
     yAxis = d3.axisLeft().scale(yScale).ticks(3);
     
     svg.append("g")
-        .attr("style", "color:gray;font-size:12px;")
+        .attr("style", "color:gray;font-size:14px;")
         .attr("transform", "translate("+(width+6)+",0)")
         .call(yAxis);
 }
@@ -179,7 +194,7 @@ function updateSigninStatus(isSignedIn) {
         stepsButton.style.display = 'none';
         caloriesButton.style.display = 'none';
         d3.select('.svg').remove();
-        slider.style = 'display:none;height:50px;';
+        slider.style = 'display:none;';
         d3.select('.header').text('');
     }
 }
