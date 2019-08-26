@@ -36,50 +36,57 @@
                     <li><a id="signout-button" class="col s3" style="display:none;padding:12px;">
                             <img class="responsive-img" src="signout.png"/>
                     </a></li>
-                    <li><a id="dark-theme" class="col s1 right" style="display:none;padding:12px;">
-                            <i class="medium material-icons">brightness_3</i>
-                    </a></li>
-                    <li><a id="light-theme" class="col s1 right" style="padding:12px;">
-                            <i class="medium material-icons">wb_sunny</i>
-                    </a></li>
                     <li><img class="responsive-img col s3 right" src="logo.png"/></li>
+                    <li>                <a id="dark-theme" style="display:none;">
+                        <i class="medium right material-icons">brightness_3</i>
+                    </a></li>
+                    <li><a id="light-theme">
+                        <i class="medium right material-icons">wb_sunny</i>
+                    </a></li>
+                    <li><a onclick="M.toast({ classes: 'rounded', html: 'Your date is safe! All processing and visualization of your data is done offline on your computer and only accessible by you.'})">
+                        <i class="material-icons">info_outline</i>
+                    </a>   </li>
                 </ul>
             </nav>
             <div class="col s1 card center-align" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
+                <br>
                 <img class="responsive-img" src="runner.gif" style="padding:0px;">
-                <h3 class="daily-step"></h4>
-                <h6 style="color:white">STEPS</h3>
+                <h5 class="date" style="color:white;"></h5>
+                <h3 class="daily-step"></h3>
+                <h6 style="color:white;font-weight:600;">STEPS</h6>
+                <br><br><br><br>               
+            </div>
+
+            <div id="right" class="col s2 card center-align" style="display:none;background-color:#1f1f1f;margin:30px;border-radius:10px;">
+                <br>
+                <h5 style="color:white;font-weight:600;">Daily Steps</h5>
+                <h6 class="header" style="color:white;"></h6>
+                <br>
+                <p style="color:gray">min</p>
+                <h6 style="color:white" class="min"></h6>
+                <p style="color:gray">max</p>
+                <h6 style="color:white" class="max"></h6>
+                <p style="color:gray">avg</p>
+                <h6 style="color:white" class="avg"></h6>
                 <br>
                 <br>
-                <p style="color:gray">Average daily steps for selected </p>
-                <p style="color:gray;" class="days"></p>
-                <h6 style="color:white" class="avg"></h3>
-                </div>
+            </div>
             <div class="col s7 card center-align" id="plot-card" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
-                <h6 class="header left" style="color:white;font-weight:600;"></h6>
                 <div id="vizGoogleFit" class="vizGoogleFit"></div>
                 <div class="slider" id="slider" style="display:none;"></div>
             </div>
-            <div class="col s2 card center-align" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
-                <br>
-                <a id="steps-button" class="steps-button chip left hoverable waves-effect" style="display:none;">STEPS</a>
-                <a id="calories-button" class="calories-button chip left hoverable waves-effect" style="display:none;">CALORIES</a>
-                <br><br>
-                <h6 style="color:white">Your data is safe!</h3>
-                <p style="color:gray">All processing and visualization of your data is done offline on your computer and only accessible by you.</h4>
-                <br><br>
+        </div>
+        </main>
+        <footer style="position:fixed;left: 0;bottom: 0;width: 100%;">
+            <div class="footer-copyright">
+            <div class="container">
+                <a id="steps-button" class="steps-button chip hoverable waves-effect left" style="display:none;">STEPS</a>
+                <a id="calories-button" class="calories-button chip hoverable waves-effect left" style="display:none;">CALORIES</a>
                 <a class="github-button" href="https://github.com/defnetuncer98/vizGoogleFit" data-icon="octicon-star" data-size="large" data-show-count="true">Star</a>
                 <a class="github-button" href="https://github.com/defnetuncer98" data-size="large">defnetuncer98</a>
             </div>
-        </div>
-        </main>
-        <!-- <footer style="position:fixed;left: 0;bottom: 0;width: 100%; background-color: #1f1f1f;">
-            <div class="footer-copyright">
-            <div class="container">© 2014 Copyright Text
-                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
             </div>
-            </div>
-        </footer> -->
+        </footer>
         <script async defer src="https://buttons.github.io/buttons.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>     
         <script src="https://d3js.org/d3.v5.min.js"></script>

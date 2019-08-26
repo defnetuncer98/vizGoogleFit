@@ -9,6 +9,7 @@ var darkTheme = document.getElementById('dark-theme');
 var lightTheme = document.getElementById('light-theme');
 var stepsButton = document.getElementById('steps-button');
 var caloriesButton = document.getElementById('calories-button');
+var right = document.getElementById('right');
 var plotCard = document.getElementById('plot-card');
 var midnight = new Date().setHours(0,0,0,0);
 var dailystep;
@@ -47,18 +48,18 @@ function viz(values){
     var minDate = new Date();
     maxDate.setDate(new Date().getDate()-(days.length-values[1]));
     minDate.setDate((new Date().getDate()-(days.length-values[1])-max+1));
-    debugger;
-    d3.select(".days").text(max + " days:");
+    d3.select(".min").text(Math.min.apply(Math, data));
+    d3.select(".max").text(Math.max.apply(Math, data));
     d3.select(".avg").text(parseInt(avg));
-    d3.select(".header").text("Daily Steps | " + formatTime(minDate) + " - " + formatTime(maxDate));
+    d3.select(".header").text(formatTime(minDate) + " - " + formatTime(maxDate));
 
     var xScale =  d3.scaleTime()
         .domain([minDate, maxDate])
-        .range([0, width]);
+        .range([10, width-25]);
 
     var yScale = d3.scaleLinear()
         .domain([0, Math.max(...data)]) 
-        .range([height, 0]); 
+        .range([height, 10]); 
     
     // remove the previous plot
     d3.select('.svg').remove();
@@ -128,7 +129,7 @@ function viz(values){
         .data(data)
         .enter()
         .append("svg:text")
-        .text(function(d,i) { 
+        .text(function(d,i) {
             var date = new Date();
             date.setMonth(maxDate.getMonth());
             date.setDate(maxDate.getDate()-i);
@@ -184,6 +185,7 @@ function updateSigninStatus(isSignedIn) {
         d3.select('.auth-info').text(auth.getGivenName() + ' ' + auth.getFamilyName());
         stepsButton.style.display = 'block';
         caloriesButton.style.display = 'block';
+        right.style.display='block';
         handleStepsClick();
     } else {
         authorizeButton.style.display = 'block';
@@ -193,6 +195,7 @@ function updateSigninStatus(isSignedIn) {
         d3.select('.auth-info').text('Get Started by Connecting your Google Account!');
         stepsButton.style.display = 'none';
         caloriesButton.style.display = 'none';
+        right.style.display = 'none';
         d3.select('.svg').remove();
         slider.style = 'display:none;';
         d3.select('.header').text('');
@@ -280,7 +283,8 @@ function makeApiCallDailySteps() {
         });
         request.execute(function(resp) {
             dailystep = d3.sum(resp.point.map(d => d.value[0].intVal));
-            d3.select('.daily-step').attr('style','display:block;color:white;line-height: 0').text(dailystep);
+            d3.select('.daily-step').attr('style','display:block;color:white;').text(dailystep);
+            d3.select('.date').text(formatTime(new Date())+", "+new Date().getFullYear())
         });
     });
 }
