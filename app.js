@@ -5,8 +5,7 @@ var scopes = 'https://www.googleapis.com/auth/fitness.activity.read';
 var auth2;
 var authorizeButton = document.getElementById('authorize-button');
 var signoutButton = document.getElementById('signout-button');
-var darkTheme = document.getElementById('dark-theme');
-var lightTheme = document.getElementById('light-theme');
+var randomcolor = document.getElementById('random-color');
 var stepsButton = document.getElementById('steps-button');
 var caloriesButton = document.getElementById('calories-button');
 var right = document.getElementById('right');
@@ -35,6 +34,10 @@ function prepareData(data){
     days.reverse();
 }
 
+function formatNumber(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function viz(values){
     var values = [parseInt(values[0]),parseInt(values[1])]
     var max = values[1]-values[0];
@@ -42,20 +45,24 @@ function viz(values){
     data.reverse();
     var avg = data.reduce((a,b) => a + b, 0)/max;
     width = document.getElementById("vizGoogleFit").offsetWidth;
-    height_margin = window.innerHeight/2 + 80;
-    height = window.innerHeight/2;
+    height = window.innerHeight*3/4 -50;
+    height_margin = window.innerHeight + 10;
     var maxDate = new Date();
     var minDate = new Date();
     maxDate.setDate(new Date().getDate()-(days.length-values[1]));
     minDate.setDate((new Date().getDate()-(days.length-values[1])-max+1));
-    d3.select(".min").text(Math.min.apply(Math, data));
-    d3.select(".max").text(Math.max.apply(Math, data));
-    d3.select(".avg").text(parseInt(avg));
-    d3.select(".header").text(formatTime(minDate) + " - " + formatTime(maxDate));
+
+    d3.select('.noUi-handle-lower .noUi-tooltip').text(formatTime(minDate));
+    d3.select('.noUi-handle-upper .noUi-tooltip').text(formatTime(maxDate));
+
+    d3.select(".min").text(formatNumber(Math.min.apply(Math, data)));
+    d3.select(".max").text(formatNumber(Math.max.apply(Math, data)));
+    d3.select(".avg").text(formatNumber(parseInt(avg)));
+    d3.select(".header").text(formatTime(minDate) + " - " + maxDate.getDate());
 
     var xScale =  d3.scaleTime()
         .domain([minDate, maxDate])
-        .range([10, width-25]);
+        .range([10, width-10]);
 
     var yScale = d3.scaleLinear()
         .domain([0, Math.max(...data)]) 
@@ -72,7 +79,7 @@ function viz(values){
     .append("svg")
     .attr("class","svg")
     .attr("width", width)
-    .attr("height", height_margin)
+    .attr("height", height+10)
     .append("g");
 
     // draw path
@@ -112,12 +119,16 @@ function viz(values){
     .attr("r", 3)
     .attr("style","fill:indigo;stroke:indigo")
     .on("mouseover", function(a, b, c) {
+        var date = new Date();
+        date.setMonth(maxDate.getMonth());
+        date.setDate(maxDate.getDate()-b);
         d3.select(this).attr("r", "6");
-        tooltip.text(a);
+        tooltip.text(formatNumber(a) + "\n" + formatTime(date));
+        tooltip.style("transform","translate(-50%,-120%) ")
         return tooltip.style("visibility", "visible");
     })
     .on("mousemove", function(){
-        return tooltip.style("top",(d3.event.pageY-30)+"px").style("left",(d3.event.pageX-5)+"px");
+        return tooltip.style("top",d3.event.pageY+"px").style("left",d3.event.pageX+"px");
     })
     .on("mouseout", function() { 
         d3.select(this).attr("r", "3")
@@ -125,32 +136,32 @@ function viz(values){
     });
 
     
-    svg.selectAll("text")
-        .data(data)
-        .enter()
-        .append("svg:text")
-        .text(function(d,i) {
-            var date = new Date();
-            date.setMonth(maxDate.getMonth());
-            date.setDate(maxDate.getDate()-i);
-            return formatTime(date);})
-        .attr('transform', (d,i)=>{
-            var date = new Date();
-            date.setMonth(maxDate.getMonth());
-            date.setDate(maxDate.getDate()-i);
-            return 'translate( '+ xScale(date) + ' , '+ (height+10) +'),'+ 'rotate(-90)';})
-        .attr("fill", "gray")
-        .attr('x', 0)
-        .attr('y', 0)
-        .style("text-anchor", "end")
-        .attr("dy", "0.4em");
+    // svg.selectAll("text")
+    //     .data(data)
+    //     .enter()
+    //     .append("svg:text")
+    //     .text(function(d,i) {
+    //         var date = new Date();
+    //         date.setMonth(maxDate.getMonth());
+    //         date.setDate(maxDate.getDate()-i);
+    //         return formatTime(date);})
+    //     .attr('transform', (d,i)=>{
+    //         var date = new Date();
+    //         date.setMonth(maxDate.getMonth());
+    //         date.setDate(maxDate.getDate()-i);
+    //         return 'translate( '+ xScale(date) + ' , '+ (height+10) +'),'+ 'rotate(-90)';})
+    //     .attr("fill", "gray")
+    //     .attr('x', 0)
+    //     .attr('y', 0)
+    //     .style("text-anchor", "end")
+    //     .attr("dy", "0.4em");
 
     yAxis = d3.axisLeft().scale(yScale).ticks(3);
     
-    svg.append("g")
-        .attr("style", "color:gray;font-size:14px;")
-        .attr("transform", "translate("+(width+6)+",0)")
-        .call(yAxis);
+    // svg.append("g")
+    //     .attr("style", "color:gray;font-size:14px;")
+    //     .attr("transform", "translate("+(width+6)+",0)")
+    //     .call(yAxis);
 }
 
 function handleClientLoad() {
@@ -170,8 +181,7 @@ function initAuth() {
         signoutButton.onclick = handleSignoutClick;
         stepsButton.onclick = handleStepsClick;
         caloriesButton.onclick = handleCaloriesClick;
-        darkTheme.onclick = handleDarkThemeClick;
-        lightTheme.onclick = handleLightThemeClick;
+        //randomcolor.onclick = handleRandomColorClick;
       });
 }
 
@@ -221,30 +231,19 @@ function handleCaloriesClick() {
     d3.select('.steps-button').attr('style','background-color:#e4e4e4;color:black;');
 }
 
-function handleDarkThemeClick(){
-    d3.select('.body').attr('style', 'background-color:#080808;')
-    lightTheme.style.display = 'block';
-    darkTheme.style.display = 'none';
-}
+// function getRandomColor() {
+//     var letters = '0123456789ABCDEF';
+//     var color = '#';
+//     for (var i = 0; i < 6; i++) {
+//       color += letters[Math.floor(Math.random() * 16)];
+//     }
+//     return color;
+//   }
 
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
-
-function handleLightThemeClick(){
-    var rndm = getRandomColor();
-//    if(rndm>'#0000ff') plotCard.style.backgroundColor = '#1f1f1f';
-//    else plotCard.style.backgroundColor = '#lightGray';
-    document.body.style.backgroundColor = rndm;
-    d3.select('.line-plot').attr("stroke", rndm);
-    lightTheme.style.display = 'none';
-    darkTheme.style.display = 'block';
-}
+// function handleRandomColorClick(){
+//     var rndm = getRandomColor();
+//     d3.select('.line-plot').attr("stroke", rndm);
+// }
 
 function makeApiCallSteps() {
     gapi.client.load('fitness', 'v1', function() {
@@ -265,7 +264,8 @@ function makeApiCallSteps() {
                 range: {
                 'min': 0,
                 'max': days.length
-                }
+                },
+                tooltips:true
             });
             slider.noUiSlider.on('update', function () {
                 viz(slider.noUiSlider.get());
@@ -284,7 +284,7 @@ function makeApiCallDailySteps() {
         request.execute(function(resp) {
             dailystep = d3.sum(resp.point.map(d => d.value[0].intVal));
             d3.select('.daily-step').attr('style','display:block;color:white;').text(dailystep);
-            d3.select('.date').text(formatTime(new Date())+", "+new Date().getFullYear())
+            //d3.select('.date').text(formatTime(new Date())+", "+new Date().getFullYear())
         });
     });
 }

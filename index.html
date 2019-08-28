@@ -15,12 +15,67 @@
             background-color: #080808
         }
         .slider{
-            background:#1f1f1f;
+            background: gray;
             box-shadow: none;
             border:0px;
         }
         .noUi-connect {
             background: purple;
+        }
+        .noUi-draggable {
+            cursor: move;
+        }
+
+        .noUi-handle {
+            cursor: w-resize;
+        }
+
+        .noUi-horizontal .noUi-handle{
+            width: 7px;
+            height: 15px;
+        }
+
+        .noUi-horizontal{
+            height: 8px;
+        }
+
+        html:not([dir=rtl]) .noUi-horizontal .noUi-handle{
+            right: -7px;
+        }
+
+        .noUi-handle:before {
+            background: transparent;
+            content:none;
+        }
+
+        .noUi-handle:after {
+            background: transparent;
+            content:none;
+        }
+
+        .noUi-tooltip {
+            background: transparent;
+            border:none;
+            color:white;
+        }
+
+        .noUi-horizontal .noUi-tooltip {
+            transform:translate(-50%,150%);
+        }
+
+        :focus {
+            outline-color: transparent;
+        }
+
+        .toast {
+            background-color:black;
+        }
+
+        #toast-container {
+            top: auto !important;
+            right: 1% !important;
+            bottom: 10%;
+            left:82%;
         }
     </style>
     <body class="body">
@@ -36,29 +91,13 @@
                     <li><a id="signout-button" class="col s3" style="display:none;padding:12px;">
                             <img class="responsive-img" src="signout.png"/>
                     </a></li>
+
                     <li><img class="responsive-img col s3 right" src="logo.png"/></li>
-                    <li>                <a id="dark-theme" style="display:none;">
-                        <i class="medium right material-icons">brightness_3</i>
-                    </a></li>
-                    <li><a id="light-theme">
-                        <i class="medium right material-icons">wb_sunny</i>
-                    </a></li>
-                    <li><a onclick="M.toast({ classes: 'rounded', html: 'Your date is safe! All processing and visualization of your data is done offline on your computer and only accessible by you.'})">
-                        <i class="material-icons">info_outline</i>
-                    </a>   </li>
                 </ul>
             </nav>
-            <div class="col s1 card center-align" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
+            <div id="right" class="col s2 card center-align" style="display:none;background-color:#1f1f1f;border:0px;margin-top:30px;margin-left:30px;border-radius:10px;">
                 <br>
                 <img class="responsive-img" src="runner.gif" style="padding:0px;">
-                <h5 class="date" style="color:white;"></h5>
-                <h3 class="daily-step"></h3>
-                <h6 style="color:white;font-weight:600;">STEPS</h6>
-                <br><br><br><br>               
-            </div>
-
-            <div id="right" class="col s2 card center-align" style="display:none;background-color:#1f1f1f;margin:30px;border-radius:10px;">
-                <br>
                 <h5 style="color:white;font-weight:600;">Daily Steps</h5>
                 <h6 class="header" style="color:white;"></h6>
                 <br>
@@ -70,21 +109,28 @@
                 <h6 style="color:white" class="avg"></h6>
                 <br>
                 <br>
-            </div>
-            <div class="col s7 card center-align" id="plot-card" style="background-color:#1f1f1f;margin:30px;border-radius: 10px;">
+                <br>
+            </div>            
+            <div class="col s7 card center-align" id="plot-card" style="background-color:transparent;border:0px;margin:30px;border-radius: 10px;">
                 <div id="vizGoogleFit" class="vizGoogleFit"></div>
                 <div class="slider" id="slider" style="display:none;"></div>
             </div>
+
+
         </div>
         </main>
         <footer style="position:fixed;left: 0;bottom: 0;width: 100%;">
-            <div class="footer-copyright">
-            <div class="container">
-                <a id="steps-button" class="steps-button chip hoverable waves-effect left" style="display:none;">STEPS</a>
-                <a id="calories-button" class="calories-button chip hoverable waves-effect left" style="display:none;">CALORIES</a>
+            <div class="footer-copyright"style="padding-left:30px;padding-right:30px" >
                 <a class="github-button" href="https://github.com/defnetuncer98/vizGoogleFit" data-icon="octicon-star" data-size="large" data-show-count="true">Star</a>
                 <a class="github-button" href="https://github.com/defnetuncer98" data-size="large">defnetuncer98</a>
-            </div>
+                <a  class="chip hoverable waves-effect right" style="color:black" onclick="M.toast({ html: 'Your date is safe! All processing and visualization of your data is done offline on your computer and only accessible by you.'})">
+                ?</a>                
+                <a id="steps-button" class="steps-button chip hoverable waves-effect right" style="display:none;">STEPS</a>
+                <a id="calories-button" class="calories-button chip hoverable waves-effect right" style="display:none;">CALORIES</a>
+                <!-- <a id="random-color" class="right responsive-img">
+                    <i class="material-icons" style="color:white">wb_sunny</i>
+                </a> -->
+
             </div>
         </footer>
         <script async defer src="https://buttons.github.io/buttons.js"></script>
