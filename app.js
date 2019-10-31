@@ -1,6 +1,6 @@
 var days = [];
-var apiKey = '';
-var clientId = '';
+var apiKey = 'AIzaSyAFE7Ispkhhy9ZR68mzTL6TWFMrJufkWfU';
+var clientId = '283704614465-h0ngd6qusn2pv0rkiuus4ohilltqovem.apps.googleusercontent.com';
 var scopes = 'https://www.googleapis.com/auth/fitness.activity.read';
 var auth2;
 var authorizeButton = document.getElementById('authorize-button');
